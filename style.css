@@ -11,19 +11,31 @@ body {
   background: #120018;
 }
 
-/* ===== FONDO CON IMAGEN ===== */
+/* =========================
+   FONDO CON IMAGEN (SIN ZOOM)
+   ========================= */
 .bg-image {
   position: fixed;
   inset: 0;
-  background-size: contain;      /* CLAVE */
+
+  /* 🔥 control real del tamaño */
+  background-size: auto 85%;     /* AJUSTA: 80%–90% */
   background-repeat: no-repeat;
   background-position: center;
-  background-color: #120018;     /* relleno elegante */
+
+  background-color: #120018;
   z-index: 0;
+  opacity: 0;
   transition: opacity 0.6s ease;
 }
 
-/* ===== OVERLAY ROSA PRO ===== */
+.bg-image.active {
+  opacity: 1;
+}
+
+/* =========================
+   OVERLAY ROSA ELEGANTE
+   ========================= */
 .overlay {
   position: fixed;
   inset: 0;
@@ -33,9 +45,17 @@ body {
     rgba(60, 0, 40, 0.85)
   );
   z-index: 1;
+  animation: subtlePulse 12s ease-in-out infinite;
 }
 
-/* ===== CORAZONES ANIMADOS ===== */
+@keyframes subtlePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.9; }
+}
+
+/* =========================
+   CORAZONES ANIMADOS
+   ========================= */
 .hearts span {
   position: fixed;
   bottom: -10%;
@@ -64,18 +84,23 @@ body {
   }
 }
 
-/* ===== CONTENIDO ===== */
+/* =========================
+   CONTENIDO PRINCIPAL
+   ========================= */
 .card {
   position: relative;
   z-index: 3;
   height: 100vh;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
   text-align: center;
   padding: 2rem;
   color: #fff;
+
   transition: opacity 0.5s ease;
 }
 
@@ -87,7 +112,9 @@ body {
   opacity: 1;
 }
 
-/* ===== TEXTO ===== */
+/* =========================
+   TEXTO
+   ========================= */
 h1 {
   font-size: clamp(2rem, 5vw, 3.2rem);
   margin-bottom: 2rem;
@@ -95,7 +122,9 @@ h1 {
   line-height: 1.2;
 }
 
-/* ===== BOTONES ===== */
+/* =========================
+   BOTONES
+   ========================= */
 .buttons {
   display: flex;
   gap: 1.5rem;
@@ -107,6 +136,7 @@ button {
   border: none;
   font-size: 1rem;
   cursor: pointer;
+
   transition: transform 0.2s ease, opacity 0.3s ease;
 }
 
@@ -127,12 +157,4 @@ button:active {
   background: #ff4f9a;
   color: #fff;
   position: relative;
-}
-.overlay {
-  animation: subtlePulse 12s ease-in-out infinite;
-}
-
-@keyframes subtlePulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.9; }
 }
