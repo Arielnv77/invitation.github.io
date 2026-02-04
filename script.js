@@ -29,6 +29,7 @@ let current = 0;
 let firstRender = true;
 
 const bg = document.getElementById("bg");
+bg.style.backgroundImage = `url(${step.image})`;
 const question = document.getElementById("question");
 const buttons = document.getElementById("buttons");
 
