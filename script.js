@@ -4,7 +4,7 @@ const steps = [
     image: "foto1.jpg",
     options: [
       { text: "Como voy a olvidarlo..", next: true },
-      { text: "¿Importa ese día?", next: true }
+      { text: "¿Importa ese día?", thinkAgain: true }
     ]
   },
   {
@@ -20,13 +20,12 @@ const steps = [
     image: "foto3.jpg",
     options: [
       { text: "Sí 💖", yes: true },
-      { text: "No, ya no", no: true }
+      { text: "No, ya no", thinkAgain: true }
     ]
   }
 ];
 
 let current = 0;
-let returningFromNo = false;
 
 const card = document.getElementById("card");
 const question = document.getElementById("question");
@@ -50,7 +49,9 @@ function renderStep() {
       btn.textContent = opt.text;
 
       if (opt.yes) btn.classList.add("yes");
-      if (opt.no) {
+
+      if (opt.thinkAgain && current === steps.length - 1) {
+        // SOLO en la última pregunta el botón huye
         btn.classList.add("no");
         btn.addEventListener("mouseenter", moveNo);
       }
@@ -67,13 +68,20 @@ function renderStep() {
 }
 
 function handleClick(option) {
+  // Pantalla intermedia "piénsalo bien"
+  if (option.thinkAgain) {
+    showThinkAgain();
+    return;
+  }
+
   // Avanzar normal
   if (option.next) {
     current++;
     renderStep();
+    return;
   }
 
-  // Sí final
+  // Final feliz
   if (option.yes) {
     card.classList.add("fade-out");
 
@@ -83,11 +91,6 @@ function handleClick(option) {
       card.classList.remove("fade-out");
       card.classList.add("fade-in");
     }, 500);
-  }
-
-  // No → pantalla intermedia
-  if (option.no) {
-    showThinkAgain();
   }
 }
 
@@ -103,7 +106,7 @@ function showThinkAgain() {
     backBtn.classList.add("yes");
 
     backBtn.addEventListener("click", () => {
-      renderStep(); // vuelve a la MISMA pregunta
+      renderStep(); // vuelve a LA MISMA pregunta
     });
 
     buttons.appendChild(backBtn);
