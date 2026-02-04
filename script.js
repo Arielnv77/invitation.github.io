@@ -26,12 +26,13 @@ const steps = [
 ];
 
 let current = 0;
+let firstRender = true;
 
 const bg = document.getElementById("bg");
 const question = document.getElementById("question");
 const buttons = document.getElementById("buttons");
 
-/* ========= ANIM STATES ========= */
+/* ========= FADE ========= */
 
 function fadeOut() {
   question.classList.remove("visible");
@@ -50,13 +51,11 @@ function fadeIn() {
 /* ========= RENDER ========= */
 
 function renderStep() {
-  fadeOut();
+  if (!firstRender) fadeOut();
 
-  // ⏱️ dejamos que el fade-out SE VEA
   setTimeout(() => {
     const step = steps[current];
 
-    // Cambiamos contenido CUANDO YA ESTÁ OCULTO
     bg.style.backgroundImage = `url(${step.image})`;
     question.innerHTML = step.text;
     buttons.innerHTML = "";
@@ -75,10 +74,10 @@ function renderStep() {
       buttons.appendChild(btn);
     });
 
-    // ⏱️ forzamos repaint + entrada
-    setTimeout(fadeIn, 50);
+    fadeIn();
+    firstRender = false;
 
-  }, 600); // 👈 ESTE TIEMPO ES CLAVE
+  }, firstRender ? 0 : 600);
 }
 
 /* ========= ACTIONS ========= */
@@ -95,10 +94,9 @@ function handleClick(option) {
       back.textContent = "Vale, otra vez";
       back.classList.add("yes");
       back.onclick = renderStep;
-
       buttons.appendChild(back);
 
-      setTimeout(fadeIn, 50);
+      fadeIn();
     }, 600);
 
     return;
@@ -116,7 +114,7 @@ function handleClick(option) {
     setTimeout(() => {
       question.innerHTML = "💖 ERES MÍA ESTE 14 💖";
       buttons.innerHTML = "";
-      setTimeout(fadeIn, 50);
+      fadeIn();
     }, 600);
   }
 }
@@ -132,5 +130,4 @@ function moveNo(e) {
 
 /* ========= INIT ========= */
 
-// ⏱️ pequeño delay inicial para que la PRIMERA entrada se anime
-setTimeout(renderStep, 200);
+renderStep();
