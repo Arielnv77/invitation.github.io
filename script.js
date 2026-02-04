@@ -26,39 +26,21 @@ const steps = [
 ];
 
 let current = 0;
-let firstRender = true;
 
 const bg = document.getElementById("bg");
 const question = document.getElementById("question");
 const buttons = document.getElementById("buttons");
 
-/* ========= FADE ========= */
-
-function fadeOut() {
-  question.classList.remove("visible");
-  buttons.classList.remove("visible");
-  bg.classList.remove("visible");
-}
-
-function fadeIn() {
-  requestAnimationFrame(() => {
-    question.classList.add("visible");
-    buttons.classList.add("visible");
-    bg.classList.add("visible");
-  });
-}
-
-/* ========= RENDER ========= */
-
-function renderStep() {
-  if (!firstRender) fadeOut();
+function renderStep(fade = false) {
+  if (fade) {
+    question.classList.remove("show");
+    buttons.classList.remove("show");
+  }
 
   setTimeout(() => {
     const step = steps[current];
 
-    // 🔥 AQUÍ es el ÚNICO sitio donde se toca la imagen
     bg.style.backgroundImage = `url(${step.image})`;
-
     question.innerHTML = step.text;
     buttons.innerHTML = "";
 
@@ -76,52 +58,55 @@ function renderStep() {
       buttons.appendChild(btn);
     });
 
-    fadeIn();
-    firstRender = false;
+    requestAnimationFrame(() => {
+      question.classList.add("show");
+      buttons.classList.add("show");
+    });
 
-  }, firstRender ? 0 : 600);
+  }, fade ? 500 : 0);
 }
-
-/* ========= ACTIONS ========= */
 
 function handleClick(option) {
   if (option.thinkAgain) {
-    fadeOut();
+    question.classList.remove("show");
+    buttons.classList.remove("show");
 
     setTimeout(() => {
       question.innerHTML = "Piénsalo bien anda 😏";
       buttons.innerHTML = "";
 
       const back = document.createElement("button");
-      back.textContent = "Vale, otra vez";
+      back.textContent = "Vale… otra vez";
       back.classList.add("yes");
-      back.onclick = renderStep;
+      back.onclick = () => renderStep(true);
+
       buttons.appendChild(back);
 
-      fadeIn();
-    }, 600);
-
+      requestAnimationFrame(() => {
+        question.classList.add("show");
+        buttons.classList.add("show");
+      });
+    }, 500);
     return;
   }
 
   if (option.next) {
     current++;
-    renderStep();
+    renderStep(true);
     return;
   }
 
   if (option.yes) {
-    fadeOut();
+    question.classList.remove("show");
+    buttons.classList.remove("show");
 
     setTimeout(() => {
       question.innerHTML = "💖 ERES MÍA ESTE 14 💖";
       buttons.innerHTML = "";
-      fadeIn();
-    }, 600);
+      question.classList.add("show");
+    }, 500);
   }
 }
-
-/* ========= BOTÓN NO ========= */
 
 function moveNo(e) {
   e.target.style.transform = `translate(
@@ -130,6 +115,5 @@ function moveNo(e) {
   )`;
 }
 
-/* ========= INIT ========= */
-
+/* INIT */
 renderStep();
