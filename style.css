@@ -8,44 +8,62 @@ body {
   height: 100vh;
   font-family: system-ui, -apple-system, sans-serif;
   overflow: hidden;
+  background: #120018;
 }
 
-/* IMAGEN DE FONDO */
+/* ===== FONDO CON IMAGEN ===== */
 .bg-image {
-  background-size: contain;
+  position: fixed;
+  inset: 0;
+  background-size: 110%;
   background-repeat: no-repeat;
   background-position: center;
+  z-index: 0;
+  transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
-/* Overlay rosa */
+/* ===== OVERLAY ROSA PRO ===== */
 .overlay {
   position: fixed;
   inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 105, 180, 0.6),
-    rgba(255, 182, 193, 0.6)
+  background: radial-gradient(
+    circle at top,
+    rgba(255, 90, 150, 0.45),
+    rgba(60, 0, 40, 0.85)
   );
   z-index: 1;
 }
 
-/* Corazones */
-.hearts::before {
-  content: "💗 💕 💖 💘 💓 💞 💗 💕 💖";
+/* ===== CORAZONES ANIMADOS ===== */
+.hearts span {
   position: fixed;
-  inset: 0;
-  font-size: 2rem;
-  opacity: 0.3;
-  animation: float 18s linear infinite;
+  bottom: -10%;
+  font-size: 1.8rem;
+  animation: floatUp 14s linear infinite;
+  opacity: 0.6;
   z-index: 2;
+  pointer-events: none;
 }
 
-@keyframes float {
-  from { transform: translateY(0); }
-  to { transform: translateY(-50%); }
+.hearts span:nth-child(odd) {
+  animation-duration: 18s;
 }
 
-/* CONTENIDO */
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(-130vh) scale(1.4);
+    opacity: 0;
+  }
+}
+
+/* ===== CONTENIDO ===== */
 .card {
   position: relative;
   z-index: 3;
@@ -68,26 +86,35 @@ body {
   opacity: 1;
 }
 
-/* TEXTO */
+/* ===== TEXTO ===== */
 h1 {
   font-size: clamp(2rem, 5vw, 3.2rem);
   margin-bottom: 2rem;
   max-width: 900px;
+  line-height: 1.2;
 }
 
-/* BOTONES */
+/* ===== BOTONES ===== */
 .buttons {
   display: flex;
   gap: 1.5rem;
 }
 
 button {
-  padding: 0.8rem 1.8rem;
-  border-radius: 30px;
+  padding: 0.9rem 2rem;
+  border-radius: 40px;
   border: none;
   font-size: 1rem;
   cursor: pointer;
-  transition: transform 0.2s ease, opacity 0.3s;
+  transition: transform 0.2s ease, opacity 0.3s ease;
+}
+
+button:hover {
+  transform: scale(1.08);
+}
+
+button:active {
+  transform: scale(0.9);
 }
 
 .yes {
@@ -99,12 +126,4 @@ button {
   background: #ff4f9a;
   color: #fff;
   position: relative;
-}
-
-button {
-  transition: transform 0.2s ease, opacity 0.3s ease;
-}
-
-button:active {
-  transform: scale(0.9);
 }
