@@ -26,28 +26,12 @@ const steps = [
 ];
 
 let current = 0;
-let showingBg1 = true;
 
 const card = document.getElementById("card");
 const question = document.getElementById("question");
 const buttons = document.getElementById("buttons");
+const photo = document.getElementById("photo");
 
-const bg1 = document.getElementById("bg1");
-const bg2 = document.getElementById("bg2");
-
-/* ===== CAMBIO DE FONDO CON CROSSFADE ===== */
-function setBackground(image) {
-  const show = showingBg1 ? bg1 : bg2;
-  const hide = showingBg1 ? bg2 : bg1;
-
-  show.style.backgroundImage = `url(${image})`;
-  show.classList.add("active");
-  hide.classList.remove("active");
-
-  showingBg1 = !showingBg1;
-}
-
-/* ===== RENDER ===== */
 function renderStep() {
   card.classList.add("fade-out");
 
@@ -55,8 +39,8 @@ function renderStep() {
     const step = steps[current];
 
     question.innerHTML = step.text;
+    photo.src = step.image;
     buttons.innerHTML = "";
-    setBackground(step.image);
 
     step.options.forEach(opt => {
       const btn = document.createElement("button");
@@ -75,10 +59,9 @@ function renderStep() {
 
     card.classList.remove("fade-out");
     card.classList.add("fade-in");
-  }, 500);
+  }, 400);
 }
 
-/* ===== CLICK ===== */
 function handleClick(option) {
   if (option.thinkAgain) {
     showThinkAgain();
@@ -99,11 +82,10 @@ function handleClick(option) {
       buttons.innerHTML = "";
       card.classList.remove("fade-out");
       card.classList.add("fade-in");
-    }, 500);
+    }, 400);
   }
 }
 
-/* ===== PIÉNSALO BIEN ===== */
 function showThinkAgain() {
   card.classList.add("fade-out");
 
@@ -123,16 +105,14 @@ function showThinkAgain() {
 
     card.classList.remove("fade-out");
     card.classList.add("fade-in");
-  }, 500);
+  }, 400);
 }
 
-/* ===== BOTÓN NO HUYE ===== */
 function moveNo(e) {
   const btn = e.target;
-  const x = Math.random() * 300 - 150;
-  const y = Math.random() * 200 - 100;
+  const x = Math.random() * 250 - 125;
+  const y = Math.random() * 150 - 75;
   btn.style.transform = `translate(${x}px, ${y}px)`;
 }
 
-/* ===== INIT ===== */
 renderStep();
