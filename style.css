@@ -6,24 +6,30 @@
 
 body {
   height: 100vh;
-  font-family: system-ui, sans-serif;
   background: #120018;
+  font-family: system-ui, sans-serif;
   overflow: hidden;
 }
 
-/* ===== FONDO CINEMATOGRÁFICO ===== */
+/* ===== IMAGEN DE FONDO ===== */
 .bg {
   position: fixed;
   inset: 0;
-  background-size: cover;
-  background-position: center;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;          /* imagen ambiental */
   filter: blur(6px) brightness(0.6);
   transform: scale(1.05);
+  opacity: 0;
   transition: opacity 0.8s ease;
   z-index: 0;
 }
 
-/* ===== OVERLAY ROSA ===== */
+.bg.show {
+  opacity: 1;
+}
+
+/* ===== OVERLAY ===== */
 .overlay {
   position: fixed;
   inset: 0;
