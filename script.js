@@ -26,24 +26,37 @@ const steps = [
 ];
 
 let current = 0;
+let showingBg1 = true;
 
 const card = document.getElementById("card");
 const question = document.getElementById("question");
 const buttons = document.getElementById("buttons");
-const bg = document.getElementById("bg");
 
-/* ===== RENDER PRINCIPAL ===== */
+const bg1 = document.getElementById("bg1");
+const bg2 = document.getElementById("bg2");
+
+/* ===== CAMBIO DE FONDO CON CROSSFADE ===== */
+function setBackground(image) {
+  const show = showingBg1 ? bg1 : bg2;
+  const hide = showingBg1 ? bg2 : bg1;
+
+  show.style.backgroundImage = `url(${image})`;
+  show.classList.add("active");
+  hide.classList.remove("active");
+
+  showingBg1 = !showingBg1;
+}
+
+/* ===== RENDER ===== */
 function renderStep() {
   card.classList.add("fade-out");
-  bg.style.opacity = 0;
-  bg.style.transform = "scale(1.15)";
 
   setTimeout(() => {
     const step = steps[current];
 
     question.innerHTML = step.text;
-    bg.style.backgroundImage = `url(${step.image})`;
     buttons.innerHTML = "";
+    setBackground(step.image);
 
     step.options.forEach(opt => {
       const btn = document.createElement("button");
@@ -62,12 +75,10 @@ function renderStep() {
 
     card.classList.remove("fade-out");
     card.classList.add("fade-in");
-    bg.style.opacity = 1;
-    bg.style.transform = "scale(1)";
   }, 500);
 }
 
-/* ===== HANDLER ===== */
+/* ===== CLICK ===== */
 function handleClick(option) {
   if (option.thinkAgain) {
     showThinkAgain();
@@ -123,5 +134,5 @@ function moveNo(e) {
   btn.style.transform = `translate(${x}px, ${y}px)`;
 }
 
-/* ===== INICIAL ===== */
+/* ===== INIT ===== */
 renderStep();
