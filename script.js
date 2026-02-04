@@ -31,14 +31,15 @@ const bg = document.getElementById("bg");
 const question = document.getElementById("question");
 const buttons = document.getElementById("buttons");
 
-function hide() {
+/* ========= ANIM STATES ========= */
+
+function fadeOut() {
   question.classList.remove("visible");
   buttons.classList.remove("visible");
   bg.classList.remove("visible");
 }
 
-function show() {
-  // forzamos frame intermedio
+function fadeIn() {
   requestAnimationFrame(() => {
     question.classList.add("visible");
     buttons.classList.add("visible");
@@ -46,12 +47,16 @@ function show() {
   });
 }
 
-function renderStep() {
-  hide();
+/* ========= RENDER ========= */
 
+function renderStep() {
+  fadeOut();
+
+  // ⏱️ dejamos que el fade-out SE VEA
   setTimeout(() => {
     const step = steps[current];
 
+    // Cambiamos contenido CUANDO YA ESTÁ OCULTO
     bg.style.backgroundImage = `url(${step.image})`;
     question.innerHTML = step.text;
     buttons.innerHTML = "";
@@ -63,20 +68,24 @@ function renderStep() {
       if (opt.yes) btn.classList.add("yes");
       if (opt.thinkAgain && current === steps.length - 1) {
         btn.classList.add("no");
-        btn.onmouseenter = moveNo;
+        btn.addEventListener("mouseenter", moveNo);
       }
 
       btn.onclick = () => handleClick(opt);
       buttons.appendChild(btn);
     });
 
-    show();
-  }, 400);
+    // ⏱️ forzamos repaint + entrada
+    setTimeout(fadeIn, 50);
+
+  }, 600); // 👈 ESTE TIEMPO ES CLAVE
 }
+
+/* ========= ACTIONS ========= */
 
 function handleClick(option) {
   if (option.thinkAgain) {
-    hide();
+    fadeOut();
 
     setTimeout(() => {
       question.innerHTML = "Piénsalo bien anda 😏";
@@ -86,10 +95,12 @@ function handleClick(option) {
       back.textContent = "Vale, otra vez";
       back.classList.add("yes");
       back.onclick = renderStep;
+
       buttons.appendChild(back);
 
-      show();
-    }, 400);
+      setTimeout(fadeIn, 50);
+    }, 600);
+
     return;
   }
 
@@ -100,15 +111,17 @@ function handleClick(option) {
   }
 
   if (option.yes) {
-    hide();
+    fadeOut();
 
     setTimeout(() => {
       question.innerHTML = "💖 ERES MÍA ESTE 14 💖";
       buttons.innerHTML = "";
-      show();
-    }, 400);
+      setTimeout(fadeIn, 50);
+    }, 600);
   }
 }
+
+/* ========= BOTÓN NO ========= */
 
 function moveNo(e) {
   e.target.style.transform = `translate(
@@ -117,4 +130,7 @@ function moveNo(e) {
   )`;
 }
 
-renderStep();
+/* ========= INIT ========= */
+
+// ⏱️ pequeño delay inicial para que la PRIMERA entrada se anime
+setTimeout(renderStep, 200);
