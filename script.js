@@ -1,17 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("JS cargado correctamente");
 
   const steps = [
     {
-      text: "¿Te acuerdas del día que te pedí salir?",
+      text: "¿Te acuerdas del día<br>que te pedí salir?",
       image: "foto1.jpg",
       options: [
-        { text: "Cómo olvidarlo", next: true },
+        { text: "Cómo olvidarlo…", next: true },
         { text: "¿Importa ese día?", thinkAgain: true }
       ]
     },
     {
-      text: "Si volviésemos al principio… ¿lo vivirías igual?",
+      text: "Si volviésemos al principio…<br>¿lo vivirías igual?",
       image: "foto2.jpg",
       options: [
         { text: "Sí, sin cambiar nada", next: true },
@@ -19,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ]
     },
     {
-      text: "Entonces… ¿soy tu persona favorita este 14?",
+      text: "Entonces…<br>¿soy tu persona favorita este 14?",
       image: "foto3.jpg",
       options: [
         { text: "Sí 💖", yes: true },
@@ -34,36 +33,67 @@ document.addEventListener("DOMContentLoaded", () => {
   const question = document.getElementById("question");
   const buttons = document.getElementById("buttons");
 
+  /* ===== PRELOAD IMÁGENES ===== */
+  const images = steps.map(s => s.image);
+  let loaded = 0;
+
+  images.forEach(src => {
+    const img = new Image();
+    img.src = src;
+    img.onload = () => {
+      loaded++;
+      if (loaded === images.length) {
+        start();
+      }
+    };
+  });
+
+  function start() {
+    renderStep();
+  }
+
+  /* ===== RENDER ===== */
   function renderStep() {
     const step = steps[current];
-    console.log("Render step", current);
 
-    bg.style.backgroundImage = `url(${step.image})`;
-    question.textContent = step.text;
-    buttons.innerHTML = "";
+    // Fade out
+    question.classList.remove("show");
+    buttons.classList.remove("show");
+    bg.classList.remove("visible");
 
-    step.options.forEach(opt => {
-      const btn = document.createElement("button");
-      btn.textContent = opt.text;
+    setTimeout(() => {
+      bg.style.backgroundImage = `url(${step.image})`;
+      bg.classList.add("visible");
 
-      if (opt.yes) btn.classList.add("yes");
-      if (opt.thinkAgain) btn.classList.add("no");
+      question.innerHTML = step.text;
+      buttons.innerHTML = "";
 
-      btn.onclick = () => handleClick(opt);
-      buttons.appendChild(btn);
-    });
+      step.options.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.textContent = opt.text;
+
+        if (opt.yes) btn.classList.add("yes");
+        if (opt.thinkAgain && current === steps.length - 1) {
+          btn.classList.add("no");
+          btn.addEventListener("mouseenter", moveNo);
+        }
+
+        btn.onclick = () => handleClick(opt);
+        buttons.appendChild(btn);
+      });
+
+      // Fade in
+      setTimeout(() => {
+        question.classList.add("show");
+        buttons.classList.add("show");
+      }, 100);
+
+    }, 500);
   }
 
   function handleClick(option) {
     if (option.thinkAgain) {
-      question.textContent = "Piénsalo bien anda 😏";
-      buttons.innerHTML = "";
-
-      const back = document.createElement("button");
-      back.textContent = "Vale, otra vez";
-      back.classList.add("yes");
-      back.onclick = renderStep;
-      buttons.appendChild(back);
+      showThinkAgain();
       return;
     }
 
@@ -74,10 +104,43 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (option.yes) {
-      question.textContent = "💖 ERES MÍA ESTE 14 💖";
-      buttons.innerHTML = "";
+      question.classList.remove("show");
+      buttons.classList.remove("show");
+
+      setTimeout(() => {
+        question.innerHTML = "💖 ERES MÍA ESTE 14 💖";
+        buttons.innerHTML = "";
+        question.classList.add("show");
+      }, 400);
     }
   }
 
-  renderStep();
+  function showThinkAgain() {
+    question.classList.remove("show");
+    buttons.classList.remove("show");
+
+    setTimeout(() => {
+      question.innerHTML = "Piénsalo bien anda 😏";
+      buttons.innerHTML = "";
+
+      const back = document.createElement("button");
+      back.textContent = "Vale, otra vez";
+      back.classList.add("yes");
+      back.onclick = renderStep;
+
+      buttons.appendChild(back);
+
+      question.classList.add("show");
+      buttons.classList.add("show");
+    }, 400);
+  }
+
+  function moveNo(e) {
+    const btn = e.target;
+    btn.style.transform = `translate(
+      ${Math.random() * 300 - 150}px,
+      ${Math.random() * 200 - 100}px
+    )`;
+  }
+
 });
