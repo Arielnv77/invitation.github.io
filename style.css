@@ -19,6 +19,12 @@ body {
   background-repeat: no-repeat;
   background-position: center;
   z-index: 0;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.bg-image.visible {
+  opacity: 1;
 }
 
 /* ===== CORAZONES ===== */
@@ -26,7 +32,7 @@ body {
   position: fixed;
   bottom: -10%;
   font-size: 1.8rem;
-  animation: floatUp 12s linear infinite;
+  animation: floatUp 14s linear infinite;
   opacity: 0.5;
   z-index: 1;
   pointer-events: none;
@@ -54,17 +60,33 @@ body {
   color: white;
 }
 
-/* TEXTO */
+/* ===== TEXTO ===== */
 h1 {
-  font-size: 2.5rem;
+  font-size: clamp(2rem, 5vw, 3.2rem);
   margin-bottom: 2rem;
   max-width: 800px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
-/* BOTONES */
+h1.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== BOTONES ===== */
 .buttons {
   display: flex;
   gap: 1.5rem;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.buttons.show {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 button {
@@ -73,6 +95,20 @@ button {
   border: none;
   font-size: 1rem;
   cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+
+button:hover {
+  transform: scale(1.08);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+button:active {
+  transform: scale(0.92);
 }
 
 .yes {
@@ -83,4 +119,5 @@ button {
 .no {
   background: #d1006b;
   color: white;
+  position: relative;
 }
