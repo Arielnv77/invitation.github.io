@@ -89,6 +89,6 @@ body[data-mode="tease"] {
 }
 
 /* IMÁGENES (USA JPG / PNG / WEBP) */
-.image-a { background-image: url("images/foto1.jpg"); }
-.image-b { background-image: url("images/foto2.jpg"); }
-.image-c { background-image: url("images/foto3.jpg"); }
+.image-a { background-image: url("foto1.jpg"); }
+.image-b { background-image: url("foto2.jpg"); }
+.image-c { background-image: url("foto3.jpg"); }
