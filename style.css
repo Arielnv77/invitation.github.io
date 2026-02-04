@@ -56,3 +56,13 @@ section {
   font-size: 1.8rem;
   margin-bottom: 1rem;
 }
+
+body[data-mode="close"] {
+  --blur: 0px;
+  --scale: 1.03;
+}
+
+body[data-mode="tease"] {
+  --blur: 8px;
+  --scale: 1.15;
+}
