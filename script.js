@@ -35,7 +35,7 @@ const buttons = document.getElementById("buttons");
 const bg1 = document.getElementById("bg1");
 const bg2 = document.getElementById("bg2");
 
-/* ===== CAMBIO DE FONDO CON CROSSFADE ===== */
+/* ===== CAMBIO DE IMAGEN CON CROSSFADE ===== */
 function setBackground(image) {
   const show = showingBg1 ? bg1 : bg2;
   const hide = showingBg1 ? bg2 : bg1;
