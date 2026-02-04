@@ -33,6 +33,7 @@ const buttons = document.getElementById("buttons");
 
 function renderStep(fade = false) {
   if (fade) {
+    bg.classList.remove("show");
     question.classList.remove("show");
     buttons.classList.remove("show");
   }
@@ -40,7 +41,7 @@ function renderStep(fade = false) {
   setTimeout(() => {
     const step = steps[current];
 
-    bg.style.backgroundImage = `url(${step.image})`;
+    bg.src = step.image;          // 🔥 ESTO NO FALLA
     question.innerHTML = step.text;
     buttons.innerHTML = "";
 
@@ -59,6 +60,7 @@ function renderStep(fade = false) {
     });
 
     requestAnimationFrame(() => {
+      bg.classList.add("show");
       question.classList.add("show");
       buttons.classList.add("show");
     });
@@ -82,10 +84,8 @@ function handleClick(option) {
 
       buttons.appendChild(back);
 
-      requestAnimationFrame(() => {
-        question.classList.add("show");
-        buttons.classList.add("show");
-      });
+      question.classList.add("show");
+      buttons.classList.add("show");
     }, 500);
     return;
   }
@@ -108,6 +108,7 @@ function handleClick(option) {
   }
 }
 
+/* Botón NO huye */
 function moveNo(e) {
   e.target.style.transform = `translate(
     ${Math.random() * 200 - 100}px,
