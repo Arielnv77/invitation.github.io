@@ -26,56 +26,32 @@ const steps = [
 ];
 
 let current = 0;
-let showingBg1 = true;
 
-const card = document.getElementById("card");
+const bg = document.getElementById("bg");
 const question = document.getElementById("question");
 const buttons = document.getElementById("buttons");
 
-const bg1 = document.getElementById("bg1");
-const bg2 = document.getElementById("bg2");
-
-/* ===== CAMBIO DE IMAGEN CON CROSSFADE ===== */
-function setBackground(image) {
-  const show = showingBg1 ? bg1 : bg2;
-  const hide = showingBg1 ? bg2 : bg1;
-
-  show.style.backgroundImage = `url(${image})`;
-  show.classList.add("active");
-  hide.classList.remove("active");
-
-  showingBg1 = !showingBg1;
-}
-
 /* ===== RENDER ===== */
 function renderStep() {
-  card.classList.add("fade-out");
+  const step = steps[current];
 
-  setTimeout(() => {
-    const step = steps[current];
+  bg.style.backgroundImage = `url(${step.image})`;
+  question.innerHTML = step.text;
+  buttons.innerHTML = "";
 
-    question.innerHTML = step.text;
-    buttons.innerHTML = "";
-    setBackground(step.image);
+  step.options.forEach(opt => {
+    const btn = document.createElement("button");
+    btn.textContent = opt.text;
 
-    step.options.forEach(opt => {
-      const btn = document.createElement("button");
-      btn.textContent = opt.text;
+    if (opt.yes) btn.classList.add("yes");
+    if (opt.thinkAgain && current === steps.length - 1) {
+      btn.classList.add("no");
+      btn.addEventListener("mouseenter", moveNo);
+    }
 
-      if (opt.yes) btn.classList.add("yes");
-
-      if (opt.thinkAgain && current === steps.length - 1) {
-        btn.classList.add("no");
-        btn.addEventListener("mouseenter", moveNo);
-      }
-
-      btn.addEventListener("click", () => handleClick(opt));
-      buttons.appendChild(btn);
-    });
-
-    card.classList.remove("fade-out");
-    card.classList.add("fade-in");
-  }, 500);
+    btn.addEventListener("click", () => handleClick(opt));
+    buttons.appendChild(btn);
+  });
 }
 
 /* ===== CLICK ===== */
@@ -92,46 +68,31 @@ function handleClick(option) {
   }
 
   if (option.yes) {
-    card.classList.add("fade-out");
-
-    setTimeout(() => {
-      question.innerHTML = "💖 ERES MÍA ESTE 14 😈<br> Te amo, mi amor";
-      buttons.innerHTML = "";
-      card.classList.remove("fade-out");
-      card.classList.add("fade-in");
-    }, 500);
+    question.innerHTML = "💖 ERES MÍA ESTE 14 😈<br> Te amo, mi amor";
+    buttons.innerHTML = "";
   }
 }
 
 /* ===== PIÉNSALO BIEN ===== */
 function showThinkAgain() {
-  card.classList.add("fade-out");
+  question.innerHTML = "Piénsalo bien anda 😏";
+  buttons.innerHTML = "";
 
-  setTimeout(() => {
-    question.innerHTML = "Piénsalo bien anda 😏";
-    buttons.innerHTML = "";
+  const backBtn = document.createElement("button");
+  backBtn.textContent = "Vale… otra vez";
+  backBtn.classList.add("yes");
+  backBtn.onclick = renderStep;
 
-    const backBtn = document.createElement("button");
-    backBtn.textContent = "Vale… otra vez";
-    backBtn.classList.add("yes");
-
-    backBtn.addEventListener("click", () => {
-      renderStep();
-    });
-
-    buttons.appendChild(backBtn);
-
-    card.classList.remove("fade-out");
-    card.classList.add("fade-in");
-  }, 500);
+  buttons.appendChild(backBtn);
 }
 
 /* ===== BOTÓN NO HUYE ===== */
 function moveNo(e) {
   const btn = e.target;
-  const x = Math.random() * 300 - 150;
-  const y = Math.random() * 200 - 100;
-  btn.style.transform = `translate(${x}px, ${y}px)`;
+  btn.style.transform = `translate(
+    ${Math.random() * 300 - 150}px,
+    ${Math.random() * 200 - 100}px
+  )`;
 }
 
 /* ===== INIT ===== */
