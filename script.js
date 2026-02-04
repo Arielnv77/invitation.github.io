@@ -1,26 +1,26 @@
 const steps = [
   {
-    text: "¿Te acuerdas de cuando todo empezó<br>sin darnos cuenta?",
+    text: "Te acuerdas del dia <br> que te pedi salir?",
     image: "foto1.jpg",
     options: [
-      { text: "Sí, y sonrío", next: true },
-      { text: "Cómo olvidarlo", next: true }
+      { text: "Como voy a olvidarlo..", next: true },
+      { text: " ¿Importa ese día?", next: true }
     ]
   },
   {
-    text: "Porque contigo,<br>cada recuerdo importa.",
+    text: " Si volvieses al principio...<br> ¿lo vivirías igual?",
     image: "foto2.jpg",
     options: [
-      { text: "Siempre nosotros", next: true },
-      { text: "Y los que faltan", next: true }
+      { text: "Si sin cambiar nada", next: true },
+      { text: "Menos timidez..quizas 👀", next: true }
     ]
   },
   {
-    text: "Entonces…<br>¿quieres ser mi San Valentín este 14<br>y todos los que vienen?",
+    text: "Entonces…<br> ¿Sigo siendo tu PERSONA favorita <br> para este 14 de febrero?",
     image: "foto3.jpg",
     options: [
       { text: "Sí 💖", yes: true },
-      { text: "No", no: true }
+      { text: "No, ya no ", no: true }
     ]
   }
 ];
@@ -72,7 +72,7 @@ function handleClick(option) {
   }
 
   if (option.yes) {
-    question.innerHTML = "💖 Sabía que dirías que sí 💖";
+    question.innerHTML = "💖 ERES MÍA ESTE 14 😈<br> Te amo Mi Amor";
     buttons.innerHTML = "";
   }
 }
