@@ -29,7 +29,6 @@ let current = 0;
 let firstRender = true;
 
 const bg = document.getElementById("bg");
-bg.style.backgroundImage = `url(${step.image})`;
 const question = document.getElementById("question");
 const buttons = document.getElementById("buttons");
 
@@ -57,7 +56,9 @@ function renderStep() {
   setTimeout(() => {
     const step = steps[current];
 
+    // 🔥 AQUÍ es el ÚNICO sitio donde se toca la imagen
     bg.style.backgroundImage = `url(${step.image})`;
+
     question.innerHTML = step.text;
     buttons.innerHTML = "";
 
