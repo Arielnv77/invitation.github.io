@@ -1,26 +1,28 @@
+console.log("JS cargado");
+
 const steps = [
   {
-    text: "Te acuerdas del día <br> que te pedí salir?",
+    text: "¿Te acuerdas del día que te pedí salir?",
     image: "foto1.jpg",
     options: [
-      { text: "Cómo voy a olvidarlo…", next: true },
+      { text: "Cómo olvidarlo", next: true },
       { text: "¿Importa ese día?", thinkAgain: true }
     ]
   },
   {
-    text: "Si volvieses al principio…<br> ¿lo vivirías igual?",
+    text: "Si volviésemos al principio… ¿lo vivirías igual?",
     image: "foto2.jpg",
     options: [
       { text: "Sí, sin cambiar nada", next: true },
-      { text: "Menos timidez… quizás 👀", next: true }
+      { text: "Menos timidez quizá 👀", next: true }
     ]
   },
   {
-    text: "Entonces…<br> ¿Sigo siendo tu PERSONA favorita <br> para este 14 de febrero?",
+    text: "Entonces… ¿soy tu persona favorita este 14?",
     image: "foto3.jpg",
     options: [
       { text: "Sí 💖", yes: true },
-      { text: "No, ya no", thinkAgain: true }
+      { text: "No", thinkAgain: true }
     ]
   }
 ];
@@ -31,12 +33,12 @@ const bg = document.getElementById("bg");
 const question = document.getElementById("question");
 const buttons = document.getElementById("buttons");
 
-/* ===== RENDER ===== */
 function renderStep() {
   const step = steps[current];
+  console.log("Render step", current);
 
   bg.style.backgroundImage = `url(${step.image})`;
-  question.innerHTML = step.text;
+  question.textContent = step.text;
   buttons.innerHTML = "";
 
   step.options.forEach(opt => {
@@ -44,20 +46,23 @@ function renderStep() {
     btn.textContent = opt.text;
 
     if (opt.yes) btn.classList.add("yes");
-    if (opt.thinkAgain && current === steps.length - 1) {
-      btn.classList.add("no");
-      btn.addEventListener("mouseenter", moveNo);
-    }
+    if (opt.thinkAgain) btn.classList.add("no");
 
-    btn.addEventListener("click", () => handleClick(opt));
+    btn.onclick = () => handleClick(opt);
     buttons.appendChild(btn);
   });
 }
 
-/* ===== CLICK ===== */
 function handleClick(option) {
   if (option.thinkAgain) {
-    showThinkAgain();
+    question.textContent = "Piénsalo bien anda 😏";
+    buttons.innerHTML = "";
+
+    const back = document.createElement("button");
+    back.textContent = "Vale, otra vez";
+    back.classList.add("yes");
+    back.onclick = renderStep;
+    buttons.appendChild(back);
     return;
   }
 
@@ -68,32 +73,9 @@ function handleClick(option) {
   }
 
   if (option.yes) {
-    question.innerHTML = "💖 ERES MÍA ESTE 14 😈<br> Te amo, mi amor";
+    question.textContent = "💖 ERES MÍA ESTE 14 💖";
     buttons.innerHTML = "";
   }
 }
 
-/* ===== PIÉNSALO BIEN ===== */
-function showThinkAgain() {
-  question.innerHTML = "Piénsalo bien anda 😏";
-  buttons.innerHTML = "";
-
-  const backBtn = document.createElement("button");
-  backBtn.textContent = "Vale… otra vez";
-  backBtn.classList.add("yes");
-  backBtn.onclick = renderStep;
-
-  buttons.appendChild(backBtn);
-}
-
-/* ===== BOTÓN NO HUYE ===== */
-function moveNo(e) {
-  const btn = e.target;
-  btn.style.transform = `translate(
-    ${Math.random() * 300 - 150}px,
-    ${Math.random() * 200 - 100}px
-  )`;
-}
-
-/* ===== INIT ===== */
 renderStep();
