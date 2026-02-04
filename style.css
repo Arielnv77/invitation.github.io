@@ -66,3 +66,9 @@ body[data-mode="tease"] {
   --blur: 8px;
   --scale: 1.15;
 }
+
+
+
+.image-a { background-image: url("images/IMG_8694.heic"); }
+.image-b { background-image: url("images/IMG_8347.HEIC"); }
+.image-c { background-image: url("images/IMG_0009.HEIC"); }
