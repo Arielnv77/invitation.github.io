@@ -4,11 +4,11 @@ const steps = [
     image: "foto1.jpg",
     options: [
       { text: "Como voy a olvidarlo..", next: true },
-      { text: " ¿Importa ese día?", next: true }
+      { text: "¿Importa ese día?", next: true }
     ]
   },
   {
-    text: " Si volvieses al principio...<br> ¿lo vivirías igual?",
+    text: "Si volvieses al principio...<br> ¿lo vivirías igual?",
     image: "foto2.jpg",
     options: [
       { text: "Si sin cambiar nada", next: true },
@@ -20,12 +20,13 @@ const steps = [
     image: "foto3.jpg",
     options: [
       { text: "Sí 💖", yes: true },
-      { text: "No, ya no ", no: true }
+      { text: "No, ya no", no: true }
     ]
   }
 ];
 
 let current = 0;
+let returningFromNo = false;
 
 const card = document.getElementById("card");
 const question = document.getElementById("question");
@@ -66,15 +67,50 @@ function renderStep() {
 }
 
 function handleClick(option) {
+  // Avanzar normal
   if (option.next) {
     current++;
     renderStep();
   }
 
+  // Sí final
   if (option.yes) {
-    question.innerHTML = "💖 ERES MÍA ESTE 14 😈<br> Te amo Mi Amor";
-    buttons.innerHTML = "";
+    card.classList.add("fade-out");
+
+    setTimeout(() => {
+      question.innerHTML = "💖 ERES MÍA ESTE 14 😈<br> Te amo mi amor";
+      buttons.innerHTML = "";
+      card.classList.remove("fade-out");
+      card.classList.add("fade-in");
+    }, 500);
   }
+
+  // No → pantalla intermedia
+  if (option.no) {
+    showThinkAgain();
+  }
+}
+
+function showThinkAgain() {
+  card.classList.add("fade-out");
+
+  setTimeout(() => {
+    question.innerHTML = "Piénsalo bien anda 😏";
+    buttons.innerHTML = "";
+
+    const backBtn = document.createElement("button");
+    backBtn.textContent = "Vale… otra vez";
+    backBtn.classList.add("yes");
+
+    backBtn.addEventListener("click", () => {
+      renderStep(); // vuelve a la MISMA pregunta
+    });
+
+    buttons.appendChild(backBtn);
+
+    card.classList.remove("fade-out");
+    card.classList.add("fade-in");
+  }, 500);
 }
 
 function moveNo(e) {
