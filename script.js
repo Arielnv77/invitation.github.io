@@ -1,18 +1,18 @@
 const steps = [
   {
-    text: "Te acuerdas del dia <br> que te pedi salir?",
+    text: "Te acuerdas del día <br> que te pedí salir?",
     image: "foto1.jpg",
     options: [
-      { text: "Como voy a olvidarlo..", next: true },
+      { text: "Cómo voy a olvidarlo…", next: true },
       { text: "¿Importa ese día?", thinkAgain: true }
     ]
   },
   {
-    text: "Si volvieses al principio...<br> ¿lo vivirías igual?",
+    text: "Si volvieses al principio…<br> ¿lo vivirías igual?",
     image: "foto2.jpg",
     options: [
-      { text: "Si sin cambiar nada", next: true },
-      { text: "Menos timidez..quizas 👀", next: true }
+      { text: "Sí, sin cambiar nada", next: true },
+      { text: "Menos timidez… quizás 👀", next: true }
     ]
   },
   {
@@ -32,10 +32,11 @@ const question = document.getElementById("question");
 const buttons = document.getElementById("buttons");
 const bg = document.getElementById("bg");
 
+/* ===== RENDER PRINCIPAL ===== */
 function renderStep() {
   card.classList.add("fade-out");
   bg.style.opacity = 0;
-  bg.style.transform = "scale(1.05)";
+  bg.style.transform = "scale(1.15)";
 
   setTimeout(() => {
     const step = steps[current];
@@ -51,7 +52,6 @@ function renderStep() {
       if (opt.yes) btn.classList.add("yes");
 
       if (opt.thinkAgain && current === steps.length - 1) {
-        // SOLO en la última pregunta el botón huye
         btn.classList.add("no");
         btn.addEventListener("mouseenter", moveNo);
       }
@@ -67,26 +67,24 @@ function renderStep() {
   }, 500);
 }
 
+/* ===== HANDLER ===== */
 function handleClick(option) {
-  // Pantalla intermedia "piénsalo bien"
   if (option.thinkAgain) {
     showThinkAgain();
     return;
   }
 
-  // Avanzar normal
   if (option.next) {
     current++;
     renderStep();
     return;
   }
 
-  // Final feliz
   if (option.yes) {
     card.classList.add("fade-out");
 
     setTimeout(() => {
-      question.innerHTML = "💖 ERES MÍA ESTE 14 😈<br> Te amo mi amor";
+      question.innerHTML = "💖 ERES MÍA ESTE 14 😈<br> Te amo, mi amor";
       buttons.innerHTML = "";
       card.classList.remove("fade-out");
       card.classList.add("fade-in");
@@ -94,6 +92,7 @@ function handleClick(option) {
   }
 }
 
+/* ===== PIÉNSALO BIEN ===== */
 function showThinkAgain() {
   card.classList.add("fade-out");
 
@@ -106,7 +105,7 @@ function showThinkAgain() {
     backBtn.classList.add("yes");
 
     backBtn.addEventListener("click", () => {
-      renderStep(); // vuelve a LA MISMA pregunta
+      renderStep();
     });
 
     buttons.appendChild(backBtn);
@@ -116,6 +115,7 @@ function showThinkAgain() {
   }, 500);
 }
 
+/* ===== BOTÓN NO HUYE ===== */
 function moveNo(e) {
   const btn = e.target;
   const x = Math.random() * 300 - 150;
@@ -123,4 +123,5 @@ function moveNo(e) {
   btn.style.transform = `translate(${x}px, ${y}px)`;
 }
 
+/* ===== INICIAL ===== */
 renderStep();
