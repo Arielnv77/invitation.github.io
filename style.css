@@ -128,3 +128,11 @@ button:active {
   color: #fff;
   position: relative;
 }
+.overlay {
+  animation: subtlePulse 12s ease-in-out infinite;
+}
+
+@keyframes subtlePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.9; }
+}
