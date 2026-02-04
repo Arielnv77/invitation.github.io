@@ -6,85 +6,80 @@
 
 body {
   height: 100vh;
-  font-family: system-ui, -apple-system, sans-serif;
-  overflow: hidden;
+  font-family: system-ui, sans-serif;
   background: #2b0020;
+  overflow: hidden;
 }
 
-/* ===== FONDO ===== */
+/* Fondo */
 .bg-image {
   position: fixed;
   inset: 0;
   background-size: auto 85%;
   background-repeat: no-repeat;
   background-position: center;
-  z-index: 0;
   opacity: 0;
   transition: opacity 0.8s ease;
+  z-index: 0;
 }
 
 .bg-image.visible {
   opacity: 1;
 }
 
-/* ===== CORAZONES ===== */
+/* Corazones */
 .hearts span {
   position: fixed;
   bottom: -10%;
-  font-size: 1.8rem;
-  animation: floatUp 14s linear infinite;
+  font-size: 1.6rem;
+  animation: floatUp 12s linear infinite;
   opacity: 0.5;
   z-index: 1;
   pointer-events: none;
 }
 
 @keyframes floatUp {
-  0% { transform: translateY(0); opacity: 0; }
-  20% { opacity: 0.6; }
-  100% { transform: translateY(-120vh); opacity: 0; }
+  from { transform: translateY(0); opacity: 0; }
+  to   { transform: translateY(-120vh); opacity: 0.6; }
 }
 
-/* ===== CONTENIDO ===== */
+/* Contenido */
 .card {
   position: relative;
   z-index: 2;
   height: 100vh;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
   text-align: center;
-  padding: 2rem;
   color: white;
 }
 
-/* ===== TEXTO ===== */
+/* TEXTO */
 h1 {
-  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-size: 2.5rem;
   margin-bottom: 2rem;
-  max-width: 800px;
   opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
-h1.show {
+h1.visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-/* ===== BOTONES ===== */
+/* BOTONES */
 .buttons {
   display: flex;
   gap: 1.5rem;
   opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
-.buttons.show {
+.buttons.visible {
   opacity: 1;
   transform: translateY(0);
 }
@@ -93,23 +88,13 @@ button {
   padding: 0.9rem 2rem;
   border-radius: 40px;
   border: none;
-  font-size: 1rem;
   cursor: pointer;
-
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    opacity 0.2s ease;
+  font-size: 1rem;
+  transition: transform 0.2s ease;
 }
 
-button:hover {
-  transform: scale(1.08);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-}
-
-button:active {
-  transform: scale(0.92);
-}
+button:hover { transform: scale(1.1); }
+button:active { transform: scale(0.95); }
 
 .yes {
   background: white;
