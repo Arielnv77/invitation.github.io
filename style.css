@@ -1,8 +1,8 @@
 :root {
-  --cream: #f6f1eb;
-  --red: #8b0d1f;
-  --red-dark: #5e0714;
-  --text-dark: #2b1c1f;
+  --cream: #8b0d1f;        /* FONDO ROJO SAN VALENTÍN */
+  --red: #ffffff;         /* botones principales */
+  --red-dark: #f3c6cb;    /* botones secundarios */
+  --text-dark: #ffffff;  /* texto en blanco */
 }
 
 * {
