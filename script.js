@@ -1,3 +1,4 @@
+
 const steps = [
   {
     text: "¿Te acuerdas del día<br>que te pedí salir?",
@@ -85,8 +86,8 @@ function handleClick(option) {
       back.textContent = "Vale… otra vez";
       back.classList.add("yes");
       back.onclick = renderStep;
-      buttons.appendChild(back);
 
+      buttons.appendChild(back);
       showAll();
     }, 500);
     return;
@@ -111,10 +112,9 @@ function handleClick(option) {
 
 function moveNo(e) {
   e.target.style.transform = `translate(
-    ${Math.random() * 200 - 100}px,
-    ${Math.random() * 120 - 60}px
+    ${Math.random() * 220 - 110}px,
+    ${Math.random() * 140 - 70}px
   )`;
 }
 
-/* INIT */
 renderStep();
