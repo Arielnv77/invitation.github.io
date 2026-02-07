@@ -1,28 +1,96 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Para ti</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="script.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Una Pregunta Especial ❤️</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <main class="card">
-
-    <!-- TEXTO CENTRADO -->
-    <div class="content">
-      <h1 id="question"></h1>
-      <div class="buttons" id="buttons"></div>
+    <!-- Step 1 -->
+    <div class="step active" id="step-1">
+        <div class="image-container">
+            <img src="foto1.jpg" alt="Nuestro momento especial" class="step-image">
+        </div>
+        <div class="content-layer">
+            <h1 class="question">¿Recuerdas cuando nos conocimos?</h1>
+            <div class="button-container">
+                <button class="btn btn-yes" data-answer="yes" data-step="1">Sí, cada detalle</button>
+                <button class="btn btn-no" data-answer="no" data-step="1">No mucho</button>
+            </div>
+        </div>
     </div>
 
-    <!-- IMAGEN GRANDE -->
-    <div class="image-frame">
-      <img id="image" src="foto1.jpg" alt="recuerdo" />
+    <!-- Step 2 -->
+    <div class="step" id="step-2">
+        <div class="image-container">
+            <img src="foto2.jpg" alt="Juntos" class="step-image">
+        </div>
+        <div class="content-layer">
+            <h1 class="question">¿Han sido los mejores años de tu vida?</h1>
+            <div class="button-container">
+                <button class="btn btn-yes" data-answer="yes" data-step="2">Sin duda alguna</button>
+                <button class="btn btn-no" data-answer="no" data-step="2">No estoy segura</button>
+            </div>
+        </div>
     </div>
 
-  </main>
+    <!-- Step 3 -->
+    <div class="step" id="step-3">
+        <div class="image-container">
+            <img src="foto3.jpg" alt="Nuestro amor" class="step-image">
+        </div>
+        <div class="content-layer">
+            <h1 class="question">¿Quieres seguir creando recuerdos conmigo?</h1>
+            <div class="button-container">
+                <button class="btn btn-yes" data-answer="yes" data-step="3">Por supuesto</button>
+                <button class="btn btn-no" data-answer="no" data-step="3">No lo sé</button>
+            </div>
+        </div>
+    </div>
 
+    <!-- Step 4 (Final) -->
+    <div class="step" id="step-4">
+        <div class="image-container">
+            <img src="foto4.jpg" alt="Para siempre" class="step-image">
+        </div>
+        <div class="content-layer">
+            <h1 class="question">¿Serás mi valentina este 14 de febrero?</h1>
+            <div class="button-container">
+                <button class="btn btn-yes" data-answer="yes" data-step="4">¡Sí! ❤️</button>
+                <button class="btn btn-no btn-runaway" data-answer="no" data-step="4">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Intermediate "Think again" screen -->
+    <div class="step intermediate" id="intermediate">
+        <div class="content-layer">
+            <h1 class="question intermediate-message">Piénsalo bien anda 😏</h1>
+            <div class="button-container">
+                <button class="btn btn-yes" id="btn-rethink">Volver a intentar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Final confirmation screen -->
+    <div class="step final" id="final">
+        <div class="content-layer">
+            <h1 class="question final-message">¡Sabía que dirías que sí! ❤️</h1>
+            <p class="final-text">
+                Casi 4 años juntos y cada día contigo es un regalo.<br>
+                Este San Valentín quiero celebrar todo lo que hemos vivido<br>
+                y todo lo que nos falta por vivir.<br><br>
+                Te amo más de lo que las palabras pueden expresar.
+            </p>
+            <div class="hearts">
+                <span class="heart">❤️</span>
+                <span class="heart">💕</span>
+                <span class="heart">💖</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
