@@ -5,6 +5,89 @@
  */
 
 // ==========================================================================
+// Mobile Detection and Features
+// ==========================================================================
+
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+/**
+ * Vibrate device when button is pressed (mobile only)
+ * @param {number} duration - Vibration duration in ms
+ */
+function vibrateDevice(duration = 50) {
+    if (isMobile && 'vibrate' in navigator) {
+        navigator.vibrate(duration);
+    }
+}
+
+/**
+ * Lock screen orientation to portrait on mobile
+ */
+function lockPortraitOrientation() {
+    if (isMobile && screen.orientation && screen.orientation.lock) {
+        screen.orientation.lock('portrait').catch(() => {
+            // Orientation lock not supported or denied
+        });
+    }
+}
+
+/**
+ * Add confetti hearts effect for mobile
+ */
+function createConfettiHearts() {
+    if (!isMobile) return;
+    
+    const colors = ['❤️', '💕', '💖', '💗', '💓', '💝'];
+    const confettiContainer = document.createElement('div');
+    confettiContainer.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 9999;
+    `;
+    document.body.appendChild(confettiContainer);
+    
+    for (let i = 0; i < 15; i++) {
+        setTimeout(() => {
+            const heart = document.createElement('div');
+            heart.textContent = colors[Math.floor(Math.random() * colors.length)];
+            heart.style.cssText = `
+                position: absolute;
+                top: -50px;
+                left: ${Math.random() * 100}%;
+                font-size: ${20 + Math.random() * 20}px;
+                animation: fallHeart ${3 + Math.random() * 2}s linear forwards;
+            `;
+            confettiContainer.appendChild(heart);
+            
+            setTimeout(() => heart.remove(), 5000);
+        }, i * 100);
+    }
+    
+    setTimeout(() => confettiContainer.remove(), 6000);
+}
+
+// Add CSS animation for falling hearts
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes fallHeart {
+        0% {
+            transform: translateY(0) rotate(0deg);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(100vh) rotate(360deg);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(style);
+
+// ==========================================================================
 // State Management
 // ==========================================================================
 
@@ -99,6 +182,9 @@ function handleButtonClick(event) {
     const answer = button.dataset.answer;
     const stepNumber = parseInt(button.dataset.step);
     
+    // Vibrate on mobile
+    vibrateDevice(50);
+    
     // Add click animation
     button.style.transform = 'scale(0.95)';
     setTimeout(() => {
@@ -127,11 +213,19 @@ function handleFinalStepClick(event) {
     const answer = button.dataset.answer;
     
     if (answer === 'yes') {
+        // Vibrate on mobile (longer for final YES)
+        vibrateDevice([100, 50, 100]);
+        
         // Add click animation
         button.style.transform = 'scale(0.95)';
         setTimeout(() => {
             button.style.transform = '';
         }, 142);
+        
+        // Show confetti on mobile
+        if (isMobile) {
+            createConfettiHearts();
+        }
         
         // Show final confirmation
         setTimeout(() => {
@@ -153,13 +247,13 @@ function initializeRunawayButton() {
     
     if (!runawayButton) return;
     
-    runawayButton.addEventListener('mouseenter', function() {
+    function moveButton() {
         // Get viewport dimensions
         const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
         
         // Get button dimensions
-        const buttonRect = this.getBoundingClientRect();
+        const buttonRect = runawayButton.getBoundingClientRect();
         const buttonWidth = buttonRect.width;
         const buttonHeight = buttonRect.height;
         
@@ -172,30 +266,28 @@ function initializeRunawayButton() {
         const randomY = Math.random() * maxY;
         
         // Apply new position
-        this.style.position = 'fixed';
-        this.style.left = `${randomX}px`;
-        this.style.top = `${randomY}px`;
-        this.style.transition = 'all 0.285s ease';
+        runawayButton.style.position = 'fixed';
+        runawayButton.style.left = `${randomX}px`;
+        runawayButton.style.top = `${randomY}px`;
+        runawayButton.style.transition = 'all 0.285s ease';
+        
+        // Vibrate on mobile when button escapes
+        vibrateDevice(30);
+    }
+    
+    // Desktop: mouseenter
+    runawayButton.addEventListener('mouseenter', moveButton);
+    
+    // Mobile: touchstart (before tap)
+    runawayButton.addEventListener('touchstart', function(event) {
+        event.preventDefault();
+        moveButton();
     });
     
     // Prevent clicking the runaway button (extra safeguard)
     runawayButton.addEventListener('click', function(event) {
         event.preventDefault();
-        
-        // Move it again just in case they managed to click
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
-        const buttonRect = this.getBoundingClientRect();
-        const buttonWidth = buttonRect.width;
-        const buttonHeight = buttonRect.height;
-        const maxX = viewportWidth - buttonWidth - 40;
-        const maxY = viewportHeight - buttonHeight - 40;
-        const randomX = Math.random() * maxX;
-        const randomY = Math.random() * maxY;
-        
-        this.style.position = 'fixed';
-        this.style.left = `${randomX}px`;
-        this.style.top = `${randomY}px`;
+        moveButton();
     });
 }
 
@@ -226,6 +318,9 @@ function initializeEventListeners() {
     // Intermediate "rethink" button
     if (rethinkButton) {
         rethinkButton.addEventListener('click', function() {
+            // Vibrate on mobile
+            vibrateDevice(50);
+            
             // Add click animation
             this.style.transform = 'scale(0.95)';
             setTimeout(() => {
@@ -251,6 +346,25 @@ function initializeEventListeners() {
  */
 function init() {
     console.log('💕 Valentine\'s Day Invitation Initialized');
+    
+    // Mobile-specific enhancements
+    if (isMobile) {
+        console.log('📱 Mobile device detected - enhanced features enabled');
+        lockPortraitOrientation();
+        
+        // Prevent pull-to-refresh on mobile
+        document.body.style.overscrollBehavior = 'none';
+        
+        // Prevent double-tap zoom
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(event) {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+    }
     
     // Ensure step 1 is visible on load
     steps[1].classList.add('active');
