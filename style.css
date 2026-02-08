@@ -28,7 +28,7 @@ body {
     height: 100vh;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
+    transition: opacity 0.76s ease-in-out, visibility 0.76s ease-in-out;
     z-index: 1;
 }
 
@@ -70,7 +70,7 @@ body {
     border-radius: 20px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
     opacity: 0.95;
-    animation: imageFloat 0.8s ease-out forwards;
+    animation: imageFloat 0.76s ease-out forwards;
 }
 
 @keyframes imageFloat {
@@ -112,7 +112,7 @@ body {
         0 0 20px rgba(255, 255, 255, 0.6);
     letter-spacing: 0.5px;
     max-width: 900px;
-    animation: textSlideIn 1s ease-out 0.3s backwards;
+    animation: textSlideIn 0.95s ease-out 0.285s backwards;
 }
 
 @keyframes textSlideIn {
@@ -157,7 +157,7 @@ body {
     gap: 2rem;
     flex-wrap: wrap;
     justify-content: center;
-    animation: buttonsSlideIn 1s ease-out 0.6s backwards;
+    animation: buttonsSlideIn 0.95s ease-out 0.57s backwards;
 }
 
 @keyframes buttonsSlideIn {
@@ -178,7 +178,7 @@ body {
     border: none;
     border-radius: 50px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.285s ease;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
     font-weight: 600;
     letter-spacing: 0.5px;
@@ -196,7 +196,7 @@ body {
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.3);
     transform: translate(-50%, -50%);
-    transition: width 0.6s, height 0.6s;
+    transition: width 0.57s, height 0.57s;
 }
 
 .btn:hover::before {
@@ -239,7 +239,7 @@ body {
 
 /* Runaway button (final step) */
 .btn-runaway {
-    transition: all 0.2s ease;
+    transition: all 0.19s ease;
 }
 
 /* ==========================================================================
@@ -272,15 +272,15 @@ body {
 
 .heart {
     display: inline-block;
-    animation: heartbeat 1.5s ease-in-out infinite;
+    animation: heartbeat 1.425s ease-in-out infinite;
 }
 
 .heart:nth-child(2) {
-    animation-delay: 0.2s;
+    animation-delay: 0.19s;
 }
 
 .heart:nth-child(3) {
-    animation-delay: 0.4s;
+    animation-delay: 0.38s;
 }
 
 @keyframes heartbeat {
