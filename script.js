@@ -43,7 +43,7 @@ function transitionToStep(fromStep, toStep) {
     setTimeout(() => {
         fromStep.classList.remove('active', 'fade-out');
         toStep.classList.add('active');
-    }, 800); // Match CSS transition duration
+    }, 760); // Match CSS transition duration
 }
 
 /**
@@ -103,18 +103,18 @@ function handleButtonClick(event) {
     button.style.transform = 'scale(0.95)';
     setTimeout(() => {
         button.style.transform = '';
-    }, 150);
+    }, 142);
     
     if (answer === 'yes') {
         // Proceed to next step
         setTimeout(() => {
             goToNextStep();
-        }, 300);
+        }, 285);
     } else if (answer === 'no') {
         // Show intermediate screen
         setTimeout(() => {
             showIntermediate(stepNumber);
-        }, 300);
+        }, 285);
     }
 }
 
@@ -131,12 +131,12 @@ function handleFinalStepClick(event) {
         button.style.transform = 'scale(0.95)';
         setTimeout(() => {
             button.style.transform = '';
-        }, 150);
+        }, 142);
         
         // Show final confirmation
         setTimeout(() => {
             showFinalScreen();
-        }, 300);
+        }, 285);
     }
     // Note: "No" button uses hover handler (runaway effect)
 }
@@ -175,7 +175,7 @@ function initializeRunawayButton() {
         this.style.position = 'fixed';
         this.style.left = `${randomX}px`;
         this.style.top = `${randomY}px`;
-        this.style.transition = 'all 0.3s ease';
+        this.style.transition = 'all 0.285s ease';
     });
     
     // Prevent clicking the runaway button (extra safeguard)
@@ -230,11 +230,11 @@ function initializeEventListeners() {
             this.style.transform = 'scale(0.95)';
             setTimeout(() => {
                 this.style.transform = '';
-            }, 150);
+            }, 142);
             
             setTimeout(() => {
                 returnToPreviousStep();
-            }, 300);
+            }, 285);
         });
     }
     
