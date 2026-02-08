@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#e8a0b4" />
+  <title>Para ti, mi amor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Lora', Georgia, serif;
+      color: hsl(340, 40%, 15%);
+      min-height: 100svh;
+      overflow-x: hidden;
+    }
+
+    /* ── Background ── */
+    .bg-layer {
+      position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0;
+    }
+    .bg-gradient {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 40%, hsl(30,40%,96%) 0%, hsl(340,40%,90%) 50%, hsl(340,45%,85%) 100%);
+    }
+    .bokeh {
+      position: absolute; border-radius: 50%; filter: blur(40px);
+      animation: bokehGlow 7s ease-in-out infinite;
+    }
+    .bg-heart {
+      position: absolute; bottom: -5%;
+      animation: floatUp 16s ease-in-out infinite, driftSide 11s ease-in-out infinite;
+    }
+    .bg-heart svg { fill: hsl(340,55%,60%); opacity: 0.15; }
+    .noise {
+      position: absolute; inset: 0; opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+      background-size: 128px;
+    }
+
+    /* ── Main container ── */
+    main {
+      position: relative; z-index: 1;
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100svh; padding: 2rem 1rem;
+    }
+    .card {
+      width: 100%; max-width: 32rem;
+      transition: opacity 0.5s, transform 0.5s;
+    }
+    .card.fade-out { opacity: 0; transform: translateY(-20px); }
+    .card.fade-in  { opacity: 1; transform: translateY(0); }
+
+    /* ── Step screen ── */
+    .step { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+
+    .dots { display: flex; gap: 0.5rem; align-items: center; }
+    .dot {
+      height: 8px; border-radius: 999px;
+      transition: all 0.5s;
+    }
+    .dot.active   { width: 24px; background: hsl(340,65%,47%); }
+    .dot.inactive { width: 8px;  background: hsl(340,30%,75%); }
+
+    .photo-wrap {
+      position: relative; width: 100%; aspect-ratio: 4/3;
+      border-radius: 1rem; overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+      animation: fadeInUp 0.8s ease-out forwards;
+    }
+    .photo-wrap img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .photo-wrap::after {
+      content: ''; position: absolute; inset: 0;
+      border-radius: 1rem;
+      box-shadow: inset 0 0 0 2px hsl(340,50%,80%);
+    }
+
+    .question {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(1.4rem, 5vw, 1.85rem);
+      font-weight: 600; text-align: center;
+      line-height: 1.5; letter-spacing: -0.02em;
+      color: hsl(340,40%,20%);
+      text-wrap: balance;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease-out 0.2s forwards;
+    }
+
+    .buttons {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 0.75rem; width: 100%; position: relative;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease-out 0.4s forwards;
+    }
+    @media (min-width: 640px) {
+      .buttons { flex-direction: row; justify-content: center; gap: 1rem; }
+    }
+
+    .btn-yes {
+      width: 100%; padding: 0.875rem 2rem;
+      background: hsl(340,65%,47%); color: #fff;
+      border: none; border-radius: 0.75rem; cursor: pointer;
+      font-family: 'Lora', Georgia, serif; font-size: 1.125rem; font-weight: 500;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
+      animation: pulseGlow 3s ease-in-out infinite;
+    }
+    .btn-yes:hover { transform: scale(1.05); background: hsl(340,70%,42%); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+    .btn-yes:active { transform: scale(0.95); }
+    @media (min-width: 640px) { .btn-yes { width: auto; } }
+
+    .btn-no {
+      width: 100%; padding: 0.875rem 2rem;
+      background: transparent; color: hsl(340,30%,45%);
+      border: 2px solid hsl(340,30%,75%); border-radius: 0.75rem; cursor: pointer;
+      font-family: 'Lora', Georgia, serif; font-size: 1.125rem; font-weight: 500;
+      transition: transform 0.3s, border-color 0.3s, background 0.3s;
+    }
+    .btn-no:hover { transform: scale(1.05); border-color: hsl(340,40%,65%); background: hsl(340,40%,92%); }
+    .btn-no:active { transform: scale(0.95); }
+    @media (min-width: 640px) { .btn-no { width: auto; } }
+
+    .btn-no.escaping {
+      position: absolute; width: auto !important; white-space: nowrap;
+      background: hsl(30,40%,96%); z-index: 50;
+      transition: left 0.25s cubic-bezier(0.34,1.56,0.64,1), top 0.25s cubic-bezier(0.34,1.56,0.64,1);
+      user-select: none; -webkit-user-select: none;
+    }
+    .btn-no.escaping:hover { transform: none; }
+
+    /* ── Think again screen ── */
+    .think-again { display: flex; flex-direction: column; align-items: center; gap: 2rem; padding: 3rem 0; }
+    .think-emoji { font-size: clamp(4rem, 12vw, 5rem); animation: fadeInUp 0.8s ease-out forwards; }
+    .think-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(1.6rem, 6vw, 2.2rem);
+      font-weight: 600; text-align: center;
+      color: hsl(340,40%,20%); text-wrap: balance;
+      opacity: 0; animation: fadeInUp 0.8s ease-out 0.2s forwards;
+    }
+    .think-sub {
+      font-size: 1.125rem; text-align: center; color: hsl(340,25%,40%);
+      opacity: 0; animation: fadeInUp 0.8s ease-out 0.3s forwards;
+    }
+    .btn-back {
+      padding: 1rem 2.5rem; background: hsl(340,65%,47%); color: #fff;
+      border: none; border-radius: 0.75rem; cursor: pointer;
+      font-family: 'Lora', Georgia, serif; font-size: 1.125rem; font-weight: 500;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s, background 0.3s;
+      opacity: 0; animation: fadeInUp 0.8s ease-out 0.4s forwards;
+    }
+    .btn-back:hover { transform: scale(1.05); background: hsl(340,70%,42%); }
+    .btn-back:active { transform: scale(0.95); }
+
+    /* ── Final screen ── */
+    .final { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; padding: 2rem 0; position: relative; }
+    .final-hearts { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+    .final-float-heart {
+      position: absolute; bottom: 0; color: hsl(340,65%,55%);
+      opacity: 0; animation: floatHearts 3s ease-out infinite;
+    }
+    .final-emoji { font-size: clamp(4rem, 12vw, 5rem); animation: scaleIn 0.7s ease-out forwards; }
+    .final-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(1.6rem, 6vw, 2.2rem);
+      font-weight: 700; text-align: center;
+      color: hsl(340,40%,18%); text-wrap: balance;
+      opacity: 0; animation: fadeInUp 0.8s ease-out 0.2s forwards;
+    }
+    .final-msg {
+      max-width: 24rem; text-align: center; font-size: 1.125rem;
+      line-height: 1.6; color: hsl(340,25%,35%); text-wrap: balance;
+      opacity: 0; animation: fadeInUp 0.8s ease-out 0.3s forwards;
+    }
+    .final-sign {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.25rem; font-weight: 600; font-style: italic;
+      color: hsl(340,55%,40%); text-align: center; margin-top: 0.5rem;
+      opacity: 0; animation: fadeInUp 0.8s ease-out 0.4s forwards;
+    }
+    .final-divider {
+      display: flex; align-items: center; gap: 0.75rem;
+      opacity: 0; animation: fadeInUp 0.8s ease-out 0.5s forwards;
+    }
+    .final-divider span {
+      font-size: 0.875rem; color: hsl(340,35%,55%);
+      font-family: 'Lora', Georgia, serif;
+    }
+    .final-divider .line { width: 3rem; height: 1px; background: hsl(340,40%,70%); }
+
+    /* ── Keyframes ── */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    @keyframes floatHearts {
+      0%   { opacity: 0; transform: translateY(0) scale(0); }
+      20%  { opacity: 1; transform: translateY(-20px) scale(1); }
+      100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 20px rgba(190,60,90,0.3); }
+      50%      { box-shadow: 0 0 40px rgba(190,60,90,0.6); }
+    }
+    @keyframes floatUp {
+      0%   { opacity: 0; transform: translateY(100vh) rotate(0deg) scale(0.5); }
+      10%  { opacity: 0.15; }
+      90%  { opacity: 0.15; }
+      100% { opacity: 0; transform: translateY(-10vh) rotate(360deg) scale(1); }
+    }
+    @keyframes driftSide {
+      0%, 100% { transform: translateX(0); }
+      50%      { transform: translateX(30px); }
+    }
+    @keyframes bokehGlow {
+      0%, 100% { opacity: 0.08; transform: scale(1); }
+      50%      { opacity: 0.18; transform: scale(1.3); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ BACKGROUND ══ -->
+<div class="bg-layer">
+  <div class="bg-gradient"></div>
+
+  <div class="bokeh" style="left:10%;top:20%;width:120px;height:120px;background:rgba(190,80,110,0.12);animation-delay:0s"></div>
+  <div class="bokeh" style="left:70%;top:15%;width:160px;height:160px;background:rgba(210,140,120,0.10);animation-delay:2s"></div>
+  <div class="bokeh" style="left:30%;top:60%;width:100px;height:100px;background:rgba(180,100,130,0.10);animation-delay:4s"></div>
+  <div class="bokeh" style="left:80%;top:70%;width:140px;height:140px;background:rgba(200,120,100,0.08);animation-delay:1s"></div>
+  <div class="bokeh" style="left:50%;top:40%;width:180px;height:180px;background:rgba(190,90,120,0.06);animation-delay:3s"></div>
+
+  <div class="bg-heart" style="left:5%;animation-duration:14s,10s;animation-delay:0s,0s"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
+  <div class="bg-heart" style="left:20%;animation-duration:18s,12s;animation-delay:2s,2s"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
+  <div class="bg-heart" style="left:40%;animation-duration:16s,11s;animation-delay:5s,5s"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
+  <div class="bg-heart" style="left:55%;animation-duration:20s,14s;animation-delay:3s,3s"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
+  <div class="bg-heart" style="left:70%;animation-duration:15s,10s;animation-delay:7s,7s"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
+  <div class="bg-heart" style="left:85%;animation-duration:17s,12s;animation-delay:1s,1s"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
+  <div class="bg-heart" style="left:95%;animation-duration:19s,13s;animation-delay:6s,6s"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
+
+  <div class="noise"></div>
+</div>
+
+<!-- ══ MAIN APP ══ -->
+<main>
+  <div class="card fade-in" id="card"></div>
+</main>
+
+<script>
+  // ── DATA ──
+  const steps = [
+    { image: "foto1.jpg", question: "¿Te acuerdas de la primera vez que nos vimos?", yesLabel: "Cada detalle", noLabel: "No mucho..." },
+    { image: "foto2.jpg", question: "¿Sabías que cada día te quiero más que el anterior?", yesLabel: "Lo sé, lo siento", noLabel: "No me había dado cuenta" },
+    { image: "foto3.jpg", question: "Estos casi 4 años han sido los mejores de mi vida... ¿y los tuyos?", yesLabel: "Sin duda alguna", noLabel: "Mmm, no sé..." },
+    { image: "foto4.jpg", question: "¿Quieres ser mi San Valentín este año y todos los que vengan?", yesLabel: "¡Sí, mi amor!", noLabel: "No" },
+  ];
+
+  const escapePhrases = ["No", "¿Seguro?", "Piénsalo...", "¿De verdad??", "Imposible", "Jajaja no", "Nah", "Venga ya"];
+
+  let currentStep = 0;
+  let escapeCount = 0;
+  const card = document.getElementById("card");
+
+  // ── TRANSITIONS ──
+  function transition(renderFn) {
+    card.classList.remove("fade-in");
+    card.classList.add("fade-out");
+    setTimeout(() => {
+      renderFn();
+      card.classList.remove("fade-out");
+      card.classList.add("fade-in");
+    }, 500);
+  }
+
+  // ── RENDER: STEP ──
+  function renderStep() {
+    const s = steps[currentStep];
+    const isFinal = currentStep === steps.length - 1;
+    escapeCount = 0;
+
+    card.innerHTML = `
+      <div class="step" id="step-container">
+        <div class="dots">
+          ${steps.map((_, i) => `<div class="dot ${i <= currentStep ? "active" : "inactive"}"></div>`).join("")}
+        </div>
+        <div class="photo-wrap"><img src="${s.image}" alt="Momento especial ${currentStep + 1}" /></div>
+        <h2 class="question">${s.question}</h2>
+        <div class="buttons" id="buttons-area">
+          <button class="btn-yes" id="btn-yes">${s.yesLabel}</button>
+          <button class="btn-no" id="btn-no">${s.noLabel}</button>
+        </div>
+      </div>
+    `;
+
+    document.getElementById("btn-yes").addEventListener("click", handleYes);
+
+    const btnNo = document.getElementById("btn-no");
+    if (isFinal) {
+      // Desktop: escape on hover
+      btnNo.addEventListener("mouseenter", escapeNoButton);
+      // Mobile: escape on touch
+      btnNo.addEventListener("touchstart", function(e) {
+        e.preventDefault();
+        escapeNoButton();
+      }, { passive: false });
+    } else {
+      btnNo.addEventListener("click", handleNo);
+    }
+  }
+
+  function escapeNoButton() {
+    const container = document.getElementById("step-container");
+    const btnNo = document.getElementById("btn-no");
+    if (!container || !btnNo) return;
+
+    const rect = container.getBoundingClientRect();
+    const btnRect = btnNo.getBoundingClientRect();
+
+    const padding = 8;
+    const maxX = rect.width - btnRect.width - padding;
+    const maxY = rect.height - btnRect.height - padding;
+
+    let newX, newY;
+    const curX = parseFloat(btnNo.style.left) || 0;
+    const curY = parseFloat(btnNo.style.top) || 0;
+
+    do {
+      newX = Math.random() * Math.max(maxX, 0) + padding;
+      newY = Math.random() * Math.max(maxY, 0) + padding;
+    } while (Math.abs(newX - curX) < 60 && Math.abs(newY - curY) < 60);
+
+    // Make container taller so button has room
+    container.style.minHeight = "420px";
+
+    btnNo.classList.add("escaping");
+    btnNo.style.left = newX + "px";
+    btnNo.style.top = newY + "px";
+
+    escapeCount++;
+    btnNo.textContent = escapePhrases[Math.min(escapeCount, escapePhrases.length - 1)];
+  }
+
+  function handleYes() {
+    if (currentStep === steps.length - 1) {
+      transition(renderFinal);
+    } else {
+      currentStep++;
+      transition(renderStep);
+    }
+  }
+
+  function handleNo() {
+    transition(renderThinkAgain);
+  }
+
+  // ── RENDER: THINK AGAIN ──
+  function renderThinkAgain() {
+    card.innerHTML = `
+      <div class="think-again">
+        <div class="think-emoji">😏</div>
+        <h2 class="think-title">Piénsalo bien anda</h2>
+        <p class="think-sub">Sabes que la respuesta correcta es otra...</p>
+        <button class="btn-back" id="btn-back">Volver a intentar</button>
+      </div>
+    `;
+    document.getElementById("btn-back").addEventListener("click", function() {
+      transition(renderStep);
+    });
+  }
+
+  // ── RENDER: FINAL ──
+  function renderFinal() {
+    let heartsHTML = "";
+    for (let i = 0; i < 12; i++) {
+      heartsHTML += `<span class="final-float-heart" style="left:${8 + i * 7.5}%;font-size:${16 + (i % 3) * 8}px;animation-delay:${i * 0.4}s">&#9829;</span>`;
+    }
+
+    card.innerHTML = `
+      <div class="final">
+        <div class="final-hearts">${heartsHTML}</div>
+        <div class="final-emoji">💕</div>
+        <h2 class="final-title">¡Lo sabía, mi amor!</h2>
+        <p class="final-msg">Gracias por estos casi 4 años increíbles. Cada día a tu lado es el mejor regalo. Te amo más de lo que las palabras pueden decir.</p>
+        <div class="final-sign">Feliz San Valentín, mi vida ♥</div>
+        <div class="final-divider">
+          <div class="line"></div>
+          <span>con todo mi amor</span>
+          <div class="line"></div>
+        </div>
+      </div>
+    `;
+  }
+
+  // ── START ──
+  renderStep();
+</script>
+</body>
+</html>
