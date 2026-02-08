@@ -1,0 +1,375 @@
+/* ==========================================================================
+   Base Styles & Typography
+   ========================================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    background: linear-gradient(135deg, #FFE5EC 0%, #FFB3C6 50%, #FFC9D9 100%);
+    min-height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+/* ==========================================================================
+   Step Container - Main layout structure
+   ========================================================================== */
+
+.step {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
+    z-index: 1;
+}
+
+.step.active {
+    opacity: 1;
+    visibility: visible;
+    z-index: 2;
+}
+
+/* Fade out animation */
+.step.fade-out {
+    opacity: 0;
+}
+
+/* ==========================================================================
+   Visual Hierarchy: Background → Image → Text
+   ========================================================================== */
+
+/* Layer 1: Image Container */
+.image-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    padding: 40px;
+}
+
+.step-image {
+    max-width: 600px;
+    max-height: 65vh;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    opacity: 0.95;
+    animation: imageFloat 0.8s ease-out forwards;
+}
+
+@keyframes imageFloat {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 0.95;
+    }
+}
+
+/* Layer 2: Content (Text & Buttons) */
+.content-layer {
+    position: relative;
+    z-index: 2;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    text-align: center;
+}
+
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+
+.question {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 400;
+    color: #2D1B2E;
+    margin-bottom: 3rem;
+    line-height: 1.3;
+    text-shadow: 
+        2px 2px 4px rgba(255, 255, 255, 0.9),
+        0 0 20px rgba(255, 255, 255, 0.6);
+    letter-spacing: 0.5px;
+    max-width: 900px;
+    animation: textSlideIn 1s ease-out 0.3s backwards;
+}
+
+@keyframes textSlideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Intermediate message styling */
+.intermediate-message {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    margin-bottom: 2rem;
+}
+
+/* Final screen typography */
+.final-message {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    margin-bottom: 2rem;
+    color: #8B1538;
+}
+
+.final-text {
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    color: #2D1B2E;
+    line-height: 1.8;
+    max-width: 800px;
+    margin: 0 auto 3rem;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+
+.button-container {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: buttonsSlideIn 1s ease-out 0.6s backwards;
+}
+
+@keyframes buttonsSlideIn {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.btn {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    padding: 1.2rem 3rem;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* Yes button */
+.btn-yes {
+    background: linear-gradient(135deg, #FF1744 0%, #E91E63 100%);
+    color: white;
+    position: relative;
+    z-index: 1;
+}
+
+.btn-yes:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 12px 30px rgba(255, 23, 68, 0.4);
+}
+
+.btn-yes:active {
+    transform: translateY(-1px) scale(1.02);
+}
+
+/* No button */
+.btn-no {
+    background: linear-gradient(135deg, #F5F5F5 0%, #E0E0E0 100%);
+    color: #555;
+}
+
+.btn-no:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, #EEEEEE 0%, #D5D5D5 100%);
+}
+
+.btn-no:active {
+    transform: translateY(-1px) scale(1.02);
+}
+
+/* Runaway button (final step) */
+.btn-runaway {
+    transition: all 0.2s ease;
+}
+
+/* ==========================================================================
+   Intermediate Screen
+   ========================================================================== */
+
+.intermediate {
+    background: linear-gradient(135deg, #FFB3C6 0%, #FF8FA3 50%, #FFB3C6 100%);
+}
+
+.intermediate .content-layer {
+    background: transparent;
+}
+
+/* ==========================================================================
+   Final Screen
+   ========================================================================== */
+
+.final {
+    background: linear-gradient(135deg, #FFE5EC 0%, #FFD4E5 50%, #FFC9D9 100%);
+}
+
+.hearts {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    font-size: 3rem;
+    margin-top: 2rem;
+}
+
+.heart {
+    display: inline-block;
+    animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+.heart:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.heart:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes heartbeat {
+    0%, 100% {
+        transform: scale(1);
+    }
+    10%, 30% {
+        transform: scale(1.1);
+    }
+    20% {
+        transform: scale(1.15);
+    }
+}
+
+/* ==========================================================================
+   Responsive Design
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .step-image {
+        max-width: 90%;
+        max-height: 50vh;
+    }
+
+    .question {
+        margin-bottom: 2rem;
+    }
+
+    .button-container {
+        gap: 1rem;
+        flex-direction: column;
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 1rem 2rem;
+    }
+
+    .hearts {
+        gap: 1.5rem;
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .image-container {
+        padding: 20px;
+    }
+
+    .step-image {
+        max-height: 40vh;
+        border-radius: 15px;
+    }
+
+    .final-text {
+        font-size: 1rem;
+    }
+}
+
+/* ==========================================================================
+   Accessibility & Print
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus styles for keyboard navigation */
+.btn:focus {
+    outline: 3px solid #FF1744;
+    outline-offset: 3px;
+}
+
+/* Ensure text remains readable */
+@media print {
+    body {
+        background: white;
+    }
+    
+    .step {
+        position: relative;
+        page-break-after: always;
+    }
+}
