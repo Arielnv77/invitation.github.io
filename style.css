@@ -156,11 +156,28 @@ body {
     margin-bottom: 2rem;
 }
 
-/* Final screen typography */
 .final-message {
     font-size: clamp(2.5rem, 6vw, 4.5rem);
     margin-bottom: 2rem;
     color: #8B1538;
+    animation: finalMessageBounce 1s ease-out;
+}
+
+@keyframes finalMessageBounce {
+    0% {
+        transform: scale(0) rotate(-10deg);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1) rotate(5deg);
+    }
+    75% {
+        transform: scale(0.95) rotate(-2deg);
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
 }
 
 .final-text {
@@ -170,6 +187,18 @@ body {
     max-width: 800px;
     margin: 0 auto 3rem;
     text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+    animation: finalTextFadeIn 1.2s ease-out 0.5s backwards;
+}
+
+@keyframes finalTextFadeIn {
+    0% {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 /* ==========================================================================
@@ -284,6 +313,17 @@ body {
 
 .final {
     background: linear-gradient(135deg, #FFE5EC 0%, #FFD4E5 50%, #FFC9D9 100%);
+    overflow-y: auto; /* Permitir scroll si es necesario */
+    position: relative; /* Para las partículas flotantes */
+}
+
+.final .content-layer {
+    min-height: 100vh; /* Mínimo 100vh pero puede crecer */
+    height: auto; /* Altura automática para contenido */
+    padding: 60px 20px; /* Padding generoso arriba y abajo */
+    justify-content: center;
+    position: relative;
+    z-index: 2; /* Por encima de las partículas */
 }
 
 .hearts {
@@ -292,30 +332,109 @@ body {
     justify-content: center;
     font-size: 3rem;
     margin-top: 2rem;
+    animation: heartsFadeIn 1s ease-out 1s backwards;
+}
+
+@keyframes heartsFadeIn {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 .heart {
     display: inline-block;
-    animation: heartbeat 1.425s ease-in-out infinite;
+    animation: heartDance 1.5s ease-in-out infinite;
+}
+
+.heart:nth-child(1) {
+    animation: heartBounce 1.2s ease-in-out infinite;
+    animation-delay: 0s;
 }
 
 .heart:nth-child(2) {
-    animation-delay: 0.19s;
+    animation: heartSpin 2s ease-in-out infinite;
+    animation-delay: 0.1s;
 }
 
 .heart:nth-child(3) {
-    animation-delay: 0.38s;
+    animation: heartPulse 1.5s ease-in-out infinite;
+    animation-delay: 0.2s;
 }
 
-@keyframes heartbeat {
+.heart:nth-child(4) {
+    animation: heartSwing 1.8s ease-in-out infinite;
+    animation-delay: 0.3s;
+}
+
+.heart:nth-child(5) {
+    animation: heartBounce 1.2s ease-in-out infinite;
+    animation-delay: 0.4s;
+}
+
+.heart:nth-child(6) {
+    animation: heartSpin 2s ease-in-out infinite;
+    animation-delay: 0.5s;
+}
+
+@keyframes heartBounce {
+    0%, 100% {
+        transform: translateY(0) scale(1);
+    }
+    50% {
+        transform: translateY(-20px) scale(1.2);
+    }
+}
+
+@keyframes heartSpin {
+    0%, 100% {
+        transform: rotate(0deg) scale(1);
+    }
+    50% {
+        transform: rotate(180deg) scale(1.3);
+    }
+}
+
+@keyframes heartPulse {
     0%, 100% {
         transform: scale(1);
     }
-    10%, 30% {
-        transform: scale(1.1);
+    25% {
+        transform: scale(1.3);
     }
-    20% {
-        transform: scale(1.15);
+    75% {
+        transform: scale(0.9);
+    }
+}
+
+@keyframes heartSwing {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(15deg);
+    }
+    75% {
+        transform: rotate(-15deg);
+    }
+}
+
+@keyframes heartDance {
+    0%, 100% {
+        transform: scale(1) rotate(0deg);
+    }
+    25% {
+        transform: scale(1.1) rotate(5deg);
+    }
+    50% {
+        transform: scale(1.2) rotate(-5deg);
+    }
+    75% {
+        transform: scale(1.1) rotate(5deg);
     }
 }
 
@@ -348,8 +467,23 @@ body {
     }
 
     .hearts {
-        gap: 1.5rem;
-        font-size: 2.5rem;
+        gap: 1rem;
+        font-size: 2rem;
+        flex-wrap: wrap;
+        padding: 0 20px;
+    }
+    
+    .final .content-layer {
+        padding: 40px 20px 80px 20px; /* Extra padding bottom para evitar corte */
+    }
+    
+    .final-text {
+        font-size: clamp(0.95rem, 4vw, 1.2rem);
+        margin-bottom: 2rem;
+    }
+    
+    .final-message {
+        font-size: clamp(1.8rem, 5vw, 3rem);
     }
 }
 
