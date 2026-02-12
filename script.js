@@ -167,7 +167,76 @@ function returnToPreviousStep() {
  */
 function showFinalScreen() {
     transitionToStep(steps[4], steps.final);
+    
+    // Añadir partículas flotantes de fondo en la pantalla final
+    setTimeout(() => {
+        createFloatingHearts();
+    }, 500);
 }
+
+/**
+ * Create floating hearts in background for final screen
+ */
+function createFloatingHearts() {
+    const finalScreen = document.getElementById('final');
+    const heartsEmojis = ['💕', '💖', '💗', '💓', '💝', '❤️'];
+    
+    // Crear contenedor de partículas
+    const particlesContainer = document.createElement('div');
+    particlesContainer.className = 'floating-particles';
+    particlesContainer.style.cssText = `
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+        overflow: hidden;
+    `;
+    
+    finalScreen.insertBefore(particlesContainer, finalScreen.firstChild);
+    
+    // Crear 20 corazones flotantes
+    for (let i = 0; i < 20; i++) {
+        setTimeout(() => {
+            const heart = document.createElement('div');
+            heart.textContent = heartsEmojis[Math.floor(Math.random() * heartsEmojis.length)];
+            heart.style.cssText = `
+                position: absolute;
+                bottom: -50px;
+                left: ${Math.random() * 100}%;
+                font-size: ${15 + Math.random() * 25}px;
+                opacity: ${0.3 + Math.random() * 0.4};
+                animation: floatUp ${8 + Math.random() * 4}s linear infinite;
+                animation-delay: ${Math.random() * 3}s;
+            `;
+            particlesContainer.appendChild(heart);
+        }, i * 200);
+    }
+}
+
+// Añadir estilos para partículas flotantes
+const floatingStyle = document.createElement('style');
+floatingStyle.textContent = `
+    @keyframes floatUp {
+        0% {
+            transform: translateY(0) translateX(0) rotate(0deg);
+            opacity: 0;
+        }
+        10% {
+            opacity: 0.6;
+        }
+        90% {
+            opacity: 0.6;
+        }
+        100% {
+            transform: translateY(-120vh) translateX(${Math.random() > 0.5 ? '' : '-'}${50 + Math.random() * 100}px) rotate(360deg);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(floatingStyle);
 
 // ==========================================================================
 // Button Event Handlers
